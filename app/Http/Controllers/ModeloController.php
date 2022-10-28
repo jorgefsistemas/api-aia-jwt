@@ -57,9 +57,20 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function show(Modelo $modelo)
+    public function show($id)
     {
         //
+        $modelo= Modelo::where('marca_id', $id)->get();
+        try {
+            if (! $modelo) {
+                return response()->json(['error' => 'error de conexión'], 500);
+            }
+        } catch (Throwable $e) {
+            session()->flash('danger', 'Ocurrió un error al imprimir' . $e->getMessage());
+
+            return response()->json(['error' => 'Ocurrió un error'. $e->getMessage()],  $e->getCode());
+        }
+        return response()->json(compact('modelo'));
     }
 
     /**

@@ -19,7 +19,7 @@ class Autos extends Model
         'email',
         'telefono',
         'fotografia',
-        'fecha_alta',
-        'fecha_eliminación'
+        'ruta'
+
     ];
 }

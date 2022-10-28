@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use SoftDeletes;
     /**
      * Run the migrations.
      *
@@ -24,9 +26,9 @@ return new class extends Migration
             $table->string('email')->required();
             $table->string('telefono')->required();
             $table->string('fotografia');
-            $table->datetime('fecha_alta')->required();
-            $table->datetime('fecha_eliminacion');
+            $table->string('ruta')->required();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AutosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('user','App\Http\Controllers\UserController@getAuthenticatedUser');
     Route::get('marca','App\Http\Controllers\MarcaController@index');
     Route::get('modelo','App\Http\Controllers\ModeloController@index');
+    Route::get('modelo/{id}','App\Http\Controllers\ModeloController@show');
+    Route::resource('autos', AutosController::class);
 });

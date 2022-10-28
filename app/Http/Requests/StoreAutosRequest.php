@@ -24,7 +24,33 @@ class StoreAutosRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'marca' => 'required',
+            'modelo' => 'required',
+            'anio' => 'required',
+            'precio' => 'required',
+            'kilometraje' => 'required',
+            'color' => 'required',
+            'email' => 'required',
+            'telefono' => 'required',
+            'fotografia' => 'required'
+
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'marca' => 'Revisar marca, es requerido',
+            'modelo' => 'Revisar modelo, es requerido',
+            'anio' => 'Revisar anio, es requerido',
+            'precio' => 'Revisar precio, es requerido',
+            'kilometraje' => 'Revisar kilometraje, es requerido',
+            'color' => 'Revisar color, es requerido',
+            'email' => 'Revisar email, es requerido',
+            'telefono' => 'Revisar telefono, es requerido',
+            'fotografia' => 'Revisar fotografia, es requerido',
+            
+
+
         ];
     }
 }
