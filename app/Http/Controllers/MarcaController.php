@@ -24,7 +24,7 @@ class MarcaController extends Controller
                 return response()->json(['error' => 'error de conexión'], 500);
             }
         } catch (Throwable $e) {
-            session()->flash('danger', 'Ocurrió un error al imprimir' . $th->getMessage());
+            session()->flash('danger', 'Ocurrió un error al imprimir' . $e->getMessage());
 
             return response()->json(['error' => 'Ocurrió un error'. $e->getMessage()],  $e->getCode());
         }

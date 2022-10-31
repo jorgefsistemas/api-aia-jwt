@@ -32,7 +32,8 @@ class StoreAutosRequest extends FormRequest
             'color' => 'required',
             'email' => 'required',
             'telefono' => 'required',
-            'fotografia' => 'required'
+            'fotografia' => 'required|min:1'
+            
 
         ];
     }

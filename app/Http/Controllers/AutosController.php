@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Autos;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
 use JWTAuth;
+use Throwable;
+use App\Models\Autos;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\StoreAutosRequest;
 use App\Http\Requests\UpdateAutosRequest;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AutosController extends Controller
 {
@@ -21,7 +22,18 @@ class AutosController extends Controller
      */
     public function index()
     {
-        //
+         //
+         $auto= Autos::all();
+         try {
+             if (! $auto) {
+                 return response()->json(['error' => 'error de conexión'], 500);
+             }
+         } catch (Throwable $e) {
+             session()->flash('danger', 'Ocurrió un error al imprimir' . $e->getMessage());
+ 
+             return response()->json(['error' => 'Ocurrió un error'. $e->getMessage()],  $e->getCode());
+         }
+         return response()->json(compact('auto'));
     }
 
     /**
@@ -40,26 +52,39 @@ class AutosController extends Controller
      * @param  \App\Http\Requests\StoreAutosRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAutosRequest $request)
-    {
+    // public function store(StoreAutosRequest $request)
+    public function store(Request $request)
+    { 
+        //return 23;
+         //dd("llegando a jwt"); 
+        // dd($request); 
+       // dd("fffff Request fffff:  ", $request); 
+        try {
+          // dd( $request->fotografia->getClientOriginalName());
+            return response()->json($request->fotografia->storeAs('public', $request->fotografia->getClientOriginalName()));
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage());
+        }
         //
-        dd("fffff StoreAutosRequest fffff:  ", $request->all());
+       // dd("fffff StoreAutosRequest fffff:  ", $request);
         
         Log::info($request);
 
 
         $auto = Autos::create([
-            'marca' => $request->get('marca'),
-            'modelo' => $request->get('modelo'),
-            'anio' => $request->get('anio'),
-            'precio' => $request->get('precio'),
-            'kilometraje' => $request->get('kilometraje'),
-            'color' => $request->get('color'),
-            'email' => $request->get('email'),
-            'telefono' => $request->get('telefono'),
-            'fotografia' => $request->get('fotografia'),
-            'ruta' => $request->get('ruta')
+            'marca' => $request->post('marca'),
+            'modelo' => $request->post('modelo'),
+            'anio' => $request->post('anio'),
+            'precio' => $request->post('precio'),
+            'kilometraje' => $request->post('kilometraje'),
+            'color' => $request->post('color'),
+            'email' => $request->post('email'),
+            'telefono' => $request->post('telefono'),
+            'fotografia' => $request->post('fotografia'),
+            'ruta' => $request->post('ruta')
         ]);
+
+        
         return response()->json(compact('auto'),201);
     }
 
