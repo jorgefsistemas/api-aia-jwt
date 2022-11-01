@@ -12,9 +12,13 @@ use App\Http\Requests\StoreAutosRequest;
 use App\Http\Requests\UpdateAutosRequest;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
+
 
 class AutosController extends Controller
 {
+    public $ruta;
     /**
      * Display a listing of the resource.
      *
@@ -55,13 +59,17 @@ class AutosController extends Controller
     // public function store(StoreAutosRequest $request)
     public function store(Request $request)
     { 
-        //return 23;
-         //dd("llegando a jwt"); 
-        // dd($request); 
-       // dd("fffff Request fffff:  ", $request); 
-        try {
+        //dd($_FILES['fotografia']['name'], $_FILES['fotografia']['tmp_name']);
+    //    dd($request->fotografia);
+        $this->validate($request,[  'fotografia' => 'required|file|image|mimes:jpeg,png,gif,svg' ]); 
+        //  $img = explode(";base64,", $request->fotografia);
+               try {
           // dd( $request->fotografia->getClientOriginalName());
-            return response()->json($request->fotografia->storeAs('public', $request->fotografia->getClientOriginalName()));
+            // return response()->json($request->fotografia->storeAs('public', $request->fotografia->getClientOriginalName()));
+            // return response()->json($request->fotografia->storeAs($request->fotografia->getClientOriginalName(), $request->fotografia->getClientOriginalFileName()));
+           $this->ruta=$request->fotografia->storeAs('public', $_FILES['fotografia']['name']);
+          // return response()->json($this->ruta);
+        //   dd($this->ruta);
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }
@@ -69,9 +77,10 @@ class AutosController extends Controller
        // dd("fffff StoreAutosRequest fffff:  ", $request);
         
         Log::info($request);
+        // dd($this->ruta);
 
-
-        $auto = Autos::create([
+        try {
+           $auto = Autos::create([
             'marca' => $request->post('marca'),
             'modelo' => $request->post('modelo'),
             'anio' => $request->post('anio'),
@@ -80,12 +89,20 @@ class AutosController extends Controller
             'color' => $request->post('color'),
             'email' => $request->post('email'),
             'telefono' => $request->post('telefono'),
-            'fotografia' => $request->post('fotografia'),
-            'ruta' => $request->post('ruta')
-        ]);
+            'fotografia' => 'foto',
+            'ruta' => $this->ruta
+        ]);  
+        dd($auto);
+
+         return response()->json(compact('auto'),201);
+        }catch (\Throwable $th) {
+            return response()->json($th->getMessage());
+        }
+
+       
 
         
-        return response()->json(compact('auto'),201);
+       
     }
 
     /**

@@ -16,7 +16,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('autos', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->bigIncrements('id');
             $table->string('marca')->required();
             $table->string('modelo')->required();
             $table->integer('anio')->required();
