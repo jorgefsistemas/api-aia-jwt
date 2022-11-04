@@ -27,7 +27,7 @@ class AutosController extends Controller
     public function index()
     {
          //
-         $auto= Autos::all();
+         $auto= Autos::orderBy('created_at', 'DESC')->get();
          try {
              if (! $auto) {
                  return response()->json(['error' => 'error de conexión'], 500);
