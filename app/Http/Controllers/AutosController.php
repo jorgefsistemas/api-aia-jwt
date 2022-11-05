@@ -59,18 +59,21 @@ class AutosController extends Controller
     // public function store(StoreAutosRequest $request)
     public function store(Request $request)
     { 
-        //dd($_FILES['fotografia']['name'], $_FILES['fotografia']['tmp_name']);
-    //    dd($request->fotografia);
+ //dd($_FILES['fotografia']['name'], $_FILES['fotografia']['tmp_name']);
+       //dd($request->fotografia);
         $this->validate($request,[  'fotografia' => 'required|file|image|mimes:jpeg,png,gif,svg' ]); 
         //  $img = explode(";base64,", $request->fotografia);
                try {
           // dd( $request->fotografia->getClientOriginalName());
             // return response()->json($request->fotografia->storeAs('public', $request->fotografia->getClientOriginalName()));
             // return response()->json($request->fotografia->storeAs($request->fotografia->getClientOriginalName(), $request->fotografia->getClientOriginalFileName()));
-           $this->ruta=$request->fotografia->storeAs('public', $_FILES['fotografia']['name']);
+
+           //$this->ruta=$request->fotografia->storeAs('public', $_FILES['fotografia']['name']);
+           $this->ruta=$request->fotografia->store('public');
           // return response()->json($this->ruta);
-        //   dd($this->ruta);
+         // return response()->json($this->ruta);
         } catch (\Throwable $th) {
+         
             return response()->json($th->getMessage());
         }
         //
@@ -92,7 +95,7 @@ class AutosController extends Controller
             'fotografia' => 'foto',
             'ruta' => $this->ruta
         ]);  
-        dd($auto);
+       // dd($auto);
 
          return response()->json(compact('auto'),201);
         }catch (\Throwable $th) {
